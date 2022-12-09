@@ -4,8 +4,8 @@
 class Employee:
     def __init__(self, name, pay=0, description="", contract_commission=None, bonus_commission=None):
         self.name = name
+        self.pay = pay
         self.description = description
-        self.pay = 0
         self.contract_commission = contract_commission
         self.bonus_commission = bonus_commission
 
@@ -13,18 +13,23 @@ class Employee:
         return self.pay
         
     def __str__(self):
+        print(f'{self.name} works on a {self.description}')
         return f'{self.name} works on a {self.description}'
 
 class SalaryEmployee(Employee):
 
     def __init__(self, name, salary, contract_commission=None, bonus_commission=None):
-        super().__init__(name, contract_commission, bonus_commission)
+        super().__init__(name, pay=0, description="", contract_commission=contract_commission, bonus_commission=bonus_commission)
         self.salary = salary
-        self.pay = self.set_pay()
-        self.description = self.set_contract_description()
+        self.set_pay()
+        self.set_contract_description()
 
     def set_pay(self):
-        self.pay += self.salary
+
+        self.pay = 0
+        print(self.pay)
+        self.pay = self.salary
+        print(self.pay)
 
         if self.contract_commission:
             self.pay += self.contract_commission.get_total_contract_commission()
@@ -32,6 +37,7 @@ class SalaryEmployee(Employee):
         elif self.bonus_commission:
             self.pay += self.bonus_commission.get_bonus_commission()
 
+        
 
     def set_contract_description(self):
         desc = f'monthly salary of {self.salary}'
@@ -40,20 +46,20 @@ class SalaryEmployee(Employee):
             desc = desc + self.contract_commission.get_contract_commission_description()
 
         elif self.bonus_commission:
-            desc = desc + self.contract_commission.get_bonus_commission_description()
+            desc = desc + self.bonus_commission.get_bonus_commission_description()
 
-        desc = desc + f'. Their total pay is {self.get_pay()}'
+        desc = desc + f'.  Their total pay is {self.get_pay()}.'
         self.description = desc
 
 
 class HourlyEmployee(Employee):
 
     def __init__(self, name, hours, hourly_rate, contract_commission=None, bonus_commission=None):
-        super().__init__(name, contract_commission, bonus_commission)
+        super().__init__(name, pay=0, description="", contract_commission=contract_commission, bonus_commission=bonus_commission)
         self.hours = hours
         self.hourly_rate = hourly_rate
-        self.pay = self.set_pay()
-        self.description = self.set_contract_description()
+        self.set_pay()
+        self.set_contract_description()
 
     def set_pay(self):
         self.pay = self.hourly_rate * self.hours
@@ -66,15 +72,15 @@ class HourlyEmployee(Employee):
 
     def set_contract_description(self):
 
-        desc = f'contract of {self.hours} at {self.hourly_rate}/hour'
+        desc = f'contract of {self.hours} hours at {self.hourly_rate}/hour'
 
         if self.contract_commission:
             desc = desc + self.contract_commission.get_contract_commission_description()
 
         elif self.bonus_commission:
-            desc = desc + self.contract_commission.get_bonus_commission_description()
+            desc = desc + self.bonus_commission.get_bonus_commission_description()
 
-        desc = desc + f'. Their total pay is {self.get_pay()}'
+        desc = desc + f'.  Their total pay is {self.get_pay()}.'
         self.description = desc
 
 
@@ -88,7 +94,7 @@ class ContractCommission:
         return self.contract_commission * self.contract_count
 
     def get_contract_commission_description(self):
-        return f' and recives a commission for {self.contract_count} contract(s) at {self.contract_commission}/contract'
+        return f' and receives a commission for {self.contract_count} contract(s) at {self.contract_commission}/contract'
 
 class BonusCommission:
 
@@ -108,7 +114,7 @@ billie = SalaryEmployee('Billie', salary=4000)
 charlie = HourlyEmployee('Charlie', hours=100, hourly_rate=25)
 
 # Renee works on a monthly salary of 3000 and receives a commission for 4 contract(s) at 200/contract.  Their total pay is 3800.
-renee = SalaryEmployee('Renee', salary=4000, contract_commission=ContractCommission(contract_commission=200, contract_count=4))
+renee = SalaryEmployee('Renee', salary=3000, contract_commission=ContractCommission(contract_commission=200, contract_count=4))
 
 # Jan works on a contract of 150 hours at 25/hour and receives a commission for 3 contract(s) at 220/contract.  Their total pay is 4410.
 jan = HourlyEmployee('Jan', hours=150, hourly_rate=25, contract_commission=ContractCommission(contract_commission=220, contract_count=3))
