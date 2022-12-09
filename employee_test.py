@@ -5,6 +5,7 @@ from employee import *
 import re
 
 def test_billie():
+    print(billie.get_pay())
     assert billie.get_pay() == 4000
     string = str(billie)
     regex = '^Billie works on a monthly salary of 4000.\s+Their total pay is 4000.$'
